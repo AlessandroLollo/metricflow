@@ -26,6 +26,7 @@ def new_metric_semantics(  # Noqa: D
 
 def test_get_names(new_data_source_semantics: DataSourceSemantics) -> None:  # noqa: D
     expected = [
+        "booking_paid_at",
         "capacity_latest",
         "company_name",
         "country_latest",
@@ -43,6 +44,7 @@ def test_get_names(new_data_source_semantics: DataSourceSemantics) -> None:  # n
     expected = [
         "average_booking_value",
         "bookers",
+        "booking_payments",
         "booking_value",
         "bookings",
         "identity_verifications",
@@ -104,6 +106,7 @@ def test_elements_for_measure(new_metric_semantics: MetricSemantics) -> None:  #
         [x.qualified_name for x in new_metric_semantics.element_specs_for_metrics([MetricSpec(element_name="views")])]
     ) == {
         "create_a_cycle_in_the_join_graph",
+        "create_a_cycle_in_the_join_graph__booking_paid_at",
         "create_a_cycle_in_the_join_graph__guest",
         "create_a_cycle_in_the_join_graph__host",
         "create_a_cycle_in_the_join_graph__is_instant",
