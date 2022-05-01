@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Sequence, List
 
 from metricflow.dataflow.dataflow_plan import ReadSqlSourceNode, PlotTimeDimensionTransformNode, BaseOutput
 from metricflow.dataset.data_source_adapter import DataSourceDataSet
@@ -13,7 +13,7 @@ class SourceNodeBuilder:
 
     def create_from_data_sets(self, data_sets: Sequence[DataSourceDataSet]) -> Sequence[BaseOutput[DataSourceDataSet]]:
         """Creates source nodes from DataSourceDataSets."""
-        source_nodes = []
+        source_nodes: List[BaseOutput[DataSourceDataSet]] = []
         for data_set in data_sets:
             read_node = ReadSqlSourceNode[DataSourceDataSet](data_set)
             aggregation_time_dimensions = self._semantic_model.data_source_semantics.get_aggregation_time_dimensions(
