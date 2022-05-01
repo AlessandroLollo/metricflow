@@ -180,11 +180,25 @@ integration_test:
   group_bys: ["_ts"]
   check_query: |
     SELECT
-      SUM(CASE WHEN is_instant THEN booking_value ELSE 0 END) AS instant_booking_value
-      , SUM(booking_value) AS booking_value
-      , ds AS _ts
-    FROM {{ source_schema }}.fct_bookings
-    GROUP BY ds
+      a.booking_value
+      , b.instant_booking_value
+      , COALESCE(a.ds, b.ds) AS _ts
+    FROM (
+      SELECT
+        SUM(booking_value) AS booking_value
+        , ds
+      FROM {{ source_schema }}.fct_bookings
+      GROUP BY ds
+    ) a
+    FULL OUTER JOIN (
+      SELECT
+        SUM(booking_value) AS instant_booking_value
+        , ds
+      FROM {{ source_schema }}.fct_bookings
+      WHERE is_instant
+      GROUP BY ds
+    ) b
+    ON a.ds = b.ds
 ---
 integration_test:
  name: min_measure_proxy
