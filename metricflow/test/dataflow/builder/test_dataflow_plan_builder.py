@@ -104,9 +104,7 @@ def test_order_by_plan(  # noqa: D
     dataflow_plan = dataflow_plan_builder.build_plan(
         MetricFlowQuerySpec(
             metric_specs=(MetricSpec(element_name="bookings"),),
-            time_dimension_specs=(
-                PTD_SPEC_DAY,
-            ),
+            time_dimension_specs=(PTD_SPEC_DAY,),
             order_by_specs=(
                 OrderBySpec(
                     item=PTD_SPEC_DAY,
@@ -143,9 +141,7 @@ def test_limit_rows_plan(  # noqa: D
     dataflow_plan = dataflow_plan_builder.build_plan(
         MetricFlowQuerySpec(
             metric_specs=(MetricSpec(element_name="bookings"),),
-            time_dimension_specs=(
-                PTD_SPEC_DAY,
-            ),
+            time_dimension_specs=(PTD_SPEC_DAY,),
             limit=1,
         )
     )
@@ -179,9 +175,7 @@ def test_multiple_metrics_plan(  # noqa: D
                     identifier_links=(),
                 ),
             ),
-            time_dimension_specs=(
-                PTD_SPEC_DAY,
-            ),
+            time_dimension_specs=(PTD_SPEC_DAY,),
         )
     )
 
@@ -214,9 +208,7 @@ def test_expr_metrics_plan(
                     identifier_links=(LinklessIdentifierSpec.from_element_name(element_name="listing"),),
                 ),
             ),
-            time_dimension_specs=(
-                PTD_SPEC_DAY,
-            ),
+            time_dimension_specs=(PTD_SPEC_DAY,),
         )
     )
 
@@ -249,9 +241,7 @@ def test_single_data_source_ratio_metrics_plan(
                     identifier_links=(LinklessIdentifierSpec.from_element_name(element_name="listing"),),
                 ),
             ),
-            time_dimension_specs=(
-                PTD_SPEC_DAY,
-            ),
+            time_dimension_specs=(PTD_SPEC_DAY,),
         )
     )
 
@@ -284,9 +274,7 @@ def test_multi_data_source_ratio_metrics_plan(
                     identifier_links=(LinklessIdentifierSpec.from_element_name(element_name="listing"),),
                 ),
             ),
-            time_dimension_specs=(
-                PTD_SPEC_DAY,
-            ),
+            time_dimension_specs=(PTD_SPEC_DAY,),
         )
     )
 
@@ -402,11 +390,7 @@ def test_where_constrained_plan_time_dimension(  # noqa: D
             where_constraint=SpecWhereClauseConstraint(
                 where_condition=f"{PTD} >= '2020-01-01'",
                 linkable_names=(PTD,),
-                linkable_spec_set=LinkableSpecSet(
-                    time_dimension_specs=(
-                        PTD_SPEC_DAY,
-                    )
-                ),
+                linkable_spec_set=LinkableSpecSet(time_dimension_specs=(PTD_SPEC_DAY,)),
                 execution_parameters=SqlBindParameters(),
             ),
         )
@@ -503,9 +487,7 @@ def test_cumulative_metric(  # noqa: D
         MetricFlowQuerySpec(
             metric_specs=(MetricSpec(element_name="trailing_2_months_revenue"),),
             dimension_specs=(),
-            time_dimension_specs=(
-                PTD_SPEC_MONTH,
-            ),
+            time_dimension_specs=(PTD_SPEC_MONTH,),
         )
     )
 
