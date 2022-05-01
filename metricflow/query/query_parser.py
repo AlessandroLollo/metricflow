@@ -641,6 +641,7 @@ class MetricFlowQueryParser:
             local_only=False,
             dimensions_only=False,
             exclude_multi_hop=False,
+            exclude_derived_time_granularities=False,
         )
 
         for dimension_spec in dimension_specs:
