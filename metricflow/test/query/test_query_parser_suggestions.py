@@ -26,8 +26,8 @@ def test_nonexistent_metric(query_parser: MetricFlowQueryParser) -> None:  # noq
                  'booking_fees',
                  'booking_value',
                  'instant_bookings',
-                 'bookings_per_view',
-                 'bookers']
+                 'booking_payments',
+                 'bookings_per_view']
             """
         ).rstrip()
         == str(exception_info.value)
