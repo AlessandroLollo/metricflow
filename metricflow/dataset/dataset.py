@@ -30,7 +30,7 @@ class DataSet:
         for the x-axis.
         """
         # TODO: Added underscores for ease of search + replace once we settle on a final name.
-        return TimeDimensionReference(element_name="_ts_")
+        return TimeDimensionReference(element_name="_ts")
 
     @staticmethod
     def plot_time_dimension_name() -> str:
