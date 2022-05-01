@@ -520,7 +520,7 @@ class DataflowToSqlQueryPlanConverter(Generic[SqlDataSetT], DataflowPlanNodeVisi
         primary_time_dimension_instance: Optional[TimeDimensionInstance] = None
         for instance in input_data_set.instance_set.time_dimension_instances:
             if (
-                instance.spec.element_name == node.primary_time_dimension_reference.element_name
+                instance.spec.element_name == node.plot_time_dimension_reference.element_name
                 and len(instance.spec.identifier_links) == 0
             ):
                 primary_time_dimension_instance = instance

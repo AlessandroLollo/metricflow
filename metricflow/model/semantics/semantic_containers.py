@@ -15,7 +15,7 @@ from metricflow.instances import DataSourceReference, DataSourceElementReference
 from metricflow.model.graph import MultiDiGraph
 from metricflow.model.objects.common import Element
 from metricflow.model.objects.data_source import DataSource, DataSourceOrigin
-from metricflow.model.objects.elements.dimension import Dimension, DimensionType
+from metricflow.model.objects.elements.dimension import Dimension
 from metricflow.model.objects.elements.measure import Measure, AggregationType
 from metricflow.model.objects.metric import Metric, MetricType
 from metricflow.model.objects.user_configured_model import UserConfiguredModel
@@ -58,7 +58,6 @@ class MetricSemantics:  # noqa: D
 
         self._linkable_spec_resolver = ValidLinkableSpecResolver(
             user_configured_model=self._user_configured_model,
-            primary_time_dimension_reference=self._data_source_semantics.primary_time_dimension_reference,
             max_identifier_links=MAX_JOIN_HOPS,
         )
 
@@ -69,13 +68,9 @@ class MetricSemantics:  # noqa: D
         dimensions_only: bool = False,
         exclude_multi_hop: bool = False,
         exclude_derived_time_granularities: bool = True,
-        exclude_local_linked_primary_time: bool = True,
     ) -> List[LinkableInstanceSpec]:
         """Dimensions common to all metrics requested (intersection)"""
         without_any_property = set()
-
-        if exclude_local_linked_primary_time:
-            without_any_property.add(LinkableElementProperties.LOCAL_LINKED_PRIMARY_TIME)
 
         if exclude_derived_time_granularities:
             without_any_property.add(LinkableElementProperties.DERIVED_TIME_GRANULARITY)
@@ -414,15 +409,6 @@ class DataSourceSemantics:
                                 partitions=tuple([str(p) for p in partitions]),
                             ),
                         )
-
-    @property
-    def primary_time_dimension_reference(self) -> TimeDimensionReference:
-        """Gets the primary time dimension that's used in all data sources."""
-        for data_source in self._configured_data_source_container.values():
-            for dimension in data_source.dimensions:
-                if dimension.type == DimensionType.TIME and dimension.type_params and dimension.type_params.is_primary:
-                    return TimeDimensionReference(element_name=dimension.name.element_name)
-        raise RuntimeError("No primary time dimension found in the model")
 
     @property
     def data_source_references(self) -> Sequence[DataSourceReference]:  # noqa: D
