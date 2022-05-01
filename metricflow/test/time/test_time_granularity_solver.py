@@ -12,6 +12,7 @@ from metricflow.model.semantic_model import SemanticModel
 from metricflow.plan_conversion.column_resolver import DefaultColumnAssociationResolver
 from metricflow.plan_conversion.time_spine import TimeSpineSource
 from metricflow.specs import MetricSpec
+from metricflow.test.time.plot_time_dimension import PTD_SPEC_DAY, PTD_SPEC_MONTH, PTD_SPEC_YEAR, PTD_REFERENCE
 from metricflow.time.time_granularity import TimeGranularity
 from metricflow.time.time_granularity_solver import (
     TimeGranularitySolver,
@@ -103,32 +104,27 @@ def test_validate_day_granularity_for_day_and_month_metric(  # noqa: D
         )
 
 
-_PARTIAL_PLOT_TIME_DIMENSION_SPEC = PartialTimeDimensionSpec(
+PARTIAL_PTD_SPEC = PartialTimeDimensionSpec(
     element_name=DataSet.plot_time_dimension_name(), identifier_links=()
 )
-_PLOT_TIME_DIMENSION_REFERENCE = DataSet.plot_time_dimension_reference()
-_PLOT_TIME_DIMENSION_SPEC_DAY = DataSet.plot_time_dimension_spec(TimeGranularity.DAY)
-_PLOT_TIME_DIMENSION_SPEC_MONTH = DataSet.plot_time_dimension_spec(TimeGranularity.MONTH)
-_PLOT_TIME_DIMENSION_SPEC_YEAR = DataSet.plot_time_dimension_spec(TimeGranularity.YEAR)
-
 
 def test_granularity_solution_for_day_metric(time_granularity_solver: TimeGranularitySolver) -> None:  # noqa: D
     assert time_granularity_solver.resolve_granularity_for_partial_time_dimension_specs(
         metric_specs=[MetricSpec(element_name="bookings")],
-        partial_time_dimension_specs=[_PARTIAL_PLOT_TIME_DIMENSION_SPEC],
-        plot_time_dimension_reference=_PLOT_TIME_DIMENSION_REFERENCE,
+        partial_time_dimension_specs=[PARTIAL_PTD_SPEC],
+        plot_time_dimension_reference=PTD_REFERENCE,
     ) == {
-        _PARTIAL_PLOT_TIME_DIMENSION_SPEC: _PLOT_TIME_DIMENSION_SPEC_DAY,
+        PARTIAL_PTD_SPEC: PTD_SPEC_DAY,
     }
 
 
 def test_granularity_solution_for_month_metric(time_granularity_solver: TimeGranularitySolver) -> None:  # noqa: D
     assert time_granularity_solver.resolve_granularity_for_partial_time_dimension_specs(
         metric_specs=[MetricSpec(element_name="bookings_monthly")],
-        partial_time_dimension_specs=[_PARTIAL_PLOT_TIME_DIMENSION_SPEC],
-        plot_time_dimension_reference=_PLOT_TIME_DIMENSION_REFERENCE,
+        partial_time_dimension_specs=[PARTIAL_PTD_SPEC],
+        plot_time_dimension_reference=PTD_REFERENCE,
     ) == {
-        _PARTIAL_PLOT_TIME_DIMENSION_SPEC: _PLOT_TIME_DIMENSION_SPEC_MONTH,
+        PARTIAL_PTD_SPEC: PTD_SPEC_MONTH,
     }
 
 
@@ -137,9 +133,9 @@ def test_granularity_solution_for_day_and_month_metrics(  # noqa: D
 ) -> None:
     assert time_granularity_solver.resolve_granularity_for_partial_time_dimension_specs(
         metric_specs=[MetricSpec(element_name="bookings"), MetricSpec(element_name="bookings_monthly")],
-        partial_time_dimension_specs=[_PARTIAL_PLOT_TIME_DIMENSION_SPEC],
-        plot_time_dimension_reference=_PLOT_TIME_DIMENSION_REFERENCE,
-    ) == {_PARTIAL_PLOT_TIME_DIMENSION_SPEC: _PLOT_TIME_DIMENSION_SPEC_MONTH}
+        partial_time_dimension_specs=[PARTIAL_PTD_SPEC],
+        plot_time_dimension_reference=PTD_REFERENCE,
+    ) == {PARTIAL_PTD_SPEC: PTD_SPEC_MONTH}
 
 
 def test_time_granularity_parameter(  # noqa: D
@@ -147,10 +143,10 @@ def test_time_granularity_parameter(  # noqa: D
 ) -> None:
     assert time_granularity_solver.resolve_granularity_for_partial_time_dimension_specs(
         metric_specs=[MetricSpec(element_name="bookings"), MetricSpec(element_name="bookings_monthly")],
-        partial_time_dimension_specs=[_PARTIAL_PLOT_TIME_DIMENSION_SPEC],
-        plot_time_dimension_reference=_PLOT_TIME_DIMENSION_REFERENCE,
+        partial_time_dimension_specs=[PARTIAL_PTD_SPEC],
+        plot_time_dimension_reference=PTD_REFERENCE,
         time_granularity=TimeGranularity.YEAR,
-    ) == {_PARTIAL_PLOT_TIME_DIMENSION_SPEC: _PLOT_TIME_DIMENSION_SPEC_YEAR}
+    ) == {PARTIAL_PTD_SPEC: PTD_SPEC_YEAR}
 
 
 def test_invalid_time_granularity_parameter(  # noqa: D
@@ -159,8 +155,8 @@ def test_invalid_time_granularity_parameter(  # noqa: D
     with pytest.raises(RequestTimeGranularityException, match="Can't use time granularity.*"):
         time_granularity_solver.resolve_granularity_for_partial_time_dimension_specs(
             metric_specs=[MetricSpec(element_name="bookings"), MetricSpec(element_name="bookings_monthly")],
-            partial_time_dimension_specs=[_PARTIAL_PLOT_TIME_DIMENSION_SPEC],
-            plot_time_dimension_reference=_PLOT_TIME_DIMENSION_REFERENCE,
+            partial_time_dimension_specs=[PARTIAL_PTD_SPEC],
+            plot_time_dimension_reference=PTD_REFERENCE,
             time_granularity=TimeGranularity.DAY,
         )
 
